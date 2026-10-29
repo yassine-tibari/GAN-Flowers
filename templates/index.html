@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jardin GAN — fleurs générées par IA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow">DCGAN · PyTorch · Flowers102</p>
+    <h1>Jardin <em>GAN</em></h1>
+    <p class="lead">Un réseau antagoniste génératif a appris à dessiner des fleurs.
+      Générez-en de nouvelles, uniques, puis téléchargez celles que vous aimez.</p>
+  </header>
+
+  <main>
+    <section class="panel" aria-labelledby="controls-title">
+      <h2 id="controls-title" class="sr-only">Paramètres de génération</h2>
+      <form id="gen-form" autocomplete="off">
+        <div class="field">
+          <label for="count">Nombre d'images <output id="count-out">8</output></label>
+          <input type="range" id="count" min="1" max="{{ max_images }}" value="8">
+        </div>
+        <div class="field">
+          <label for="size">Taille</label>
+          <select id="size">
+            {% for s in sizes %}<option value="{{ s }}" {{ 'selected' if s == 256 }}>{{ s }} × {{ s }} px</option>{% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label for="seed">Graine <span class="hint">(optionnelle)</span></label>
+          <input type="number" id="seed" min="0" placeholder="aléatoire">
+        </div>
+        <button type="submit" id="btn-generate" class="btn primary">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="label">Générer</span>
+        </button>
+      </form>
+    </section>
+
+    <div id="message" class="message" role="status" aria-live="polite" hidden></div>
+
+    <section id="results" hidden>
+      <div class="results-bar">
+        <p id="results-info"></p>
+        <button id="btn-zip" class="btn">Tout télécharger (.zip)</button>
+      </div>
+      <div id="grid" class="grid"></div>
+    </section>
+
+    <section id="empty" class="empty">
+      <div class="bloom" aria-hidden="true"></div>
+      <p>Aucune fleur pour l'instant. Cliquez sur <strong>Générer</strong> pour faire éclore les premières.</p>
+    </section>
+  </main>
+
+  <footer>Les images sont synthétiques : aucune n'existe dans le dataset d'origine.</footer>
+
+  <div id="lightbox" class="lightbox" hidden>
+    <img alt="Fleur agrandie">
+    <a class="btn primary" id="lb-download" href="#">Télécharger</a>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
